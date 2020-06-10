@@ -5,6 +5,7 @@ set nu
 set rnu
 set showcmd
 set nowrap
+set hlsearch
 colors elflord
 syntax on
 filetype plugin indent on
@@ -40,19 +41,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
+Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree'
+Plug 'editorconfig/editorconfig-vim'
+
 Plug 'kien/ctrlp.vim'
-Plug 'yuezk/vim-js', { 'for': 'javascript' }
-Plug 'maxmellon/vim-jsx-pretty', { 'for': 'javascript' }
-Plug 'sickill/vim-monokai'
-call plug#end()
-
-map <C-n> :NERDTreeToggle<CR>
-map <C-m> :NERDTreeFind<CR>
-
-" ============================================
-" Plugin - CtrlP config
-" ============================================
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_custom_ignore = {
@@ -61,3 +54,43 @@ let g:ctrlp_custom_ignore = {
   \ 'link': '',
   \ }
 
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'jparise/vim-graphql'
+Plug 'sickill/vim-monokai'
+
+" https://thoughtbot.com/blog/modern-typescript-and-react-development-in-vim
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"let g:coc_global_extensions = [
+"  \ 'coc-tsserver'
+"  \ ]
+"if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+"  let g:coc_global_extensions += ['coc-prettier']
+"endif
+"
+"if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+"  let g:coc_global_extensions += ['coc-eslint']
+"endif
+"nnoremap <silent> K :call CocAction('doHover')<CR>
+"
+"function! ShowDocIfNoDiagnostic(timer_id)
+"  if (coc#util#has_float() == 0)
+"    silent call CocActionAsync('doHover')
+"  endif
+"endfunction
+"
+"function! s:show_hover_doc()
+"  call timer_start(500, 'ShowDocIfNoDiagnostic')
+"endfunction
+
+" autocmd CursorHoldI * :call <SID>show_hover_doc()
+" autocmd CursorHold * :call <SID>show_hover_doc()
+call plug#end()
+
+map <C-n> :NERDTreeToggle<CR>
+map <C-m> :NERDTreeFind<CR>
+
+autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
