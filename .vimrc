@@ -1,12 +1,14 @@
 " ============================================
-" view
+" basic & view
 " ============================================
+set nocompatible
+set background=dark
+colors default
 set nu
 set rnu
 set showcmd
 set nowrap
 set hlsearch
-colors elflord
 syntax on
 filetype plugin indent on
 
@@ -15,6 +17,8 @@ filetype plugin indent on
 " ============================================
 set mouse=a
 set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8
 set backspace=2
 set tabstop=2
 set softtabstop=2
@@ -58,35 +62,37 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'jparise/vim-graphql'
+" Plug 'jparise/vim-graphql'
+
 Plug 'sickill/vim-monokai'
+Plug 'altercation/vim-colors-solarized'
 
-" https://thoughtbot.com/blog/modern-typescript-and-react-development-in-vim
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"let g:coc_global_extensions = [
-"  \ 'coc-tsserver'
-"  \ ]
-"if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
-"  let g:coc_global_extensions += ['coc-prettier']
-"endif
-"
-"if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
-"  let g:coc_global_extensions += ['coc-eslint']
-"endif
-"nnoremap <silent> K :call CocAction('doHover')<CR>
-"
-"function! ShowDocIfNoDiagnostic(timer_id)
-"  if (coc#util#has_float() == 0)
-"    silent call CocActionAsync('doHover')
-"  endif
-"endfunction
-"
-"function! s:show_hover_doc()
-"  call timer_start(500, 'ShowDocIfNoDiagnostic')
-"endfunction
+"  https://thoughtbot.com/blog/modern-typescript-and-react-development-in-vim
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" let g:coc_global_extensions = [
+"   \ 'coc-tsserver'
+"   \ ]
+" if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+"   let g:coc_global_extensions += ['coc-prettier']
+" endif
+" 
+" if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+"   let g:coc_global_extensions += ['coc-eslint']
+" endif
+" nnoremap <silent> K :call CocAction('doHover')<CR>
+" 
+" function! ShowDocIfNoDiagnostic(timer_id)
+"   if (coc#util#has_float() == 0)
+"     silent call CocActionAsync('doHover')
+"   endif
+" endfunction
+" 
+" function! s:show_hover_doc()
+"   call timer_start(500, 'ShowDocIfNoDiagnostic')
+" endfunction
 
-" autocmd CursorHoldI * :call <SID>show_hover_doc()
-" autocmd CursorHold * :call <SID>show_hover_doc()
+"  autocmd CursorHoldI * :call <SID>show_hover_doc()
+"  autocmd CursorHold * :call <SID>show_hover_doc()
 call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
@@ -94,3 +100,12 @@ map <C-m> :NERDTreeFind<CR>
 
 autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+
+" ============================================
+" cunstom view
+" 256 colors: http://guns.github.io/xterm-color-table.vim/images/xterm-color-table-with-visible-rgb.png
+" ============================================
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
+hi lineNr cterm=italic ctermfg=8
+hi Comment cterm=italic ctermfg=8
