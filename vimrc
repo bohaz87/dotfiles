@@ -1,9 +1,15 @@
 " ============================================
 " basic & view
 " ============================================
-set nocompatible
-set background=dark
 colors default
+
+if has("nvim")
+  set signcolumn=yes:1
+else
+  set signcolumn=number
+endif
+
+set nocompatible
 set nu
 set rnu
 set showcmd
@@ -28,6 +34,7 @@ set shiftwidth=2
 set expandtab
 set nojoinspaces
 set eol
+nmap 0 ^
 
 " ============================================
 " backup
@@ -48,6 +55,7 @@ endif
 
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'editorconfig/editorconfig-vim'
 
@@ -81,12 +89,37 @@ endif
 if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
   let g:coc_global_extensions += ['coc-eslint']
 endif
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call CocAction('doHover')<CR>
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
 function! ShowDocIfNoDiagnostic(timer_id)
   if (coc#util#has_float() == 0)
@@ -101,7 +134,7 @@ endfunction
 autocmd CursorHoldI * :call <SID>show_hover_doc()
 autocmd CursorHold * :call <SID>show_hover_doc()
 
-Plug 'dense-analysis/ale'
+"Plug 'dense-analysis/ale'
 Plug 'prettier/vim-prettier', {
       \ 'do': 'npm install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
@@ -109,16 +142,17 @@ Plug 'prettier/vim-prettier', {
 Plug 'mileszs/ack.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
+Plug 'ap/vim-css-color'
 call plug#end()
 
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\}
-
-let g:ale_fixers = {
-\  'javascript': ['eslint'],
-\}
-let g:ale_fix_on_save = 1
+"let g:ale_linters = {
+"\   'javascript': ['eslint'],
+"\}
+"
+"let g:ale_fixers = {
+"\  'javascript': ['eslint'],
+"\}
+"let g:ale_fix_on_save = 1
 
 map <C-n> :NERDTreeToggle<CR>
 map <C-m> :NERDTreeFind<CR>
@@ -144,14 +178,7 @@ map <Leader>k <Plug>(easymotion-k)
 " autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 " autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 
-
-" gui settings
-if has('gui_running')
-  set background=light
-  set linespace=1
-  colors default
-  set guifont=source_code_pro:h13
-endif
+let g:airline_theme='ayu_dark'
 
 " ============================================
 " cunstom view
@@ -159,5 +186,18 @@ endif
 " ============================================
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
+
+" my theme
+set cursorline
+hi CursorLineNr cterm=bold ctermfg=0
 hi lineNr cterm=italic ctermfg=8
-hi Comment cterm=italic ctermfg=8 gui=italic guifg=darkgray
+hi Comment cterm=italic ctermfg=8
+hi Pmenu guifg=black guibg=#f1e5bc
+hi VertSplit cterm=NONE ctermbg=NONE ctermfg=NONE
+hi SignColumn ctermbg=NONE
+" hi Split ctermbg=NONE guibg=NONE guifg=NONE
+
+" " Output the current syntax group
+nnoremap <f13> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<cr>
